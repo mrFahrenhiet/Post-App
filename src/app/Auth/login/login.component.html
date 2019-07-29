@@ -1,0 +1,14 @@
+<div class="container mt-5">
+  <mat-card>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <mat-form-field class="input" style="width: 100%">
+            <input matInput formControlName="username" type="text" placeholder="Username">
+          </mat-form-field>
+          <mat-form-field class="input" style="width: 100%">
+            <input matInput formControlName="password" type="password" placeholder="Password" >
+          </mat-form-field>
+          <button mat-raised-button color="primary">Login</button>
+        </form>
+  </mat-card>
+</div>
+

@@ -1,7 +1,12 @@
 <mat-toolbar color="primary">
   <span><a [routerLink]="['posts']" routerLinkActive = "active" type="button" [routerLinkActiveOptions]="{exact:
     true}" mat-button>Posts</a></span>
-  <span class="example-spacer"></span>
   <span><a [routerLink]="['posts', 'new']" routerLinkActive = "active" [routerLinkActiveOptions]="{exact:
     true}" mat-button>Add New Post</a></span>
+  <span class="example-spacer"></span>
+  <span><a [routerLink]="['login']" routerLinkActive = "active" [routerLinkActiveOptions]="{exact:
+    true}" mat-button *ngIf="!isAuthenticated">Login</a></span>
+  <span><a [routerLink]="['signup']" routerLinkActive = "active" [routerLinkActiveOptions]="{exact:
+    true}" mat-button *ngIf="!isAuthenticated">Signup</a></span>
+    <span><button mat-button *ngIf="isAuthenticated" class="button">Logout</button></span>
 </mat-toolbar>

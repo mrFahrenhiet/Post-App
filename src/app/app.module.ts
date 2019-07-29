@@ -11,14 +11,19 @@ import { PostsCreateComponent } from './posts/posts-create/posts-create.componen
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { LoginComponent } from './auth/login/login.component';
+import { SignupComponent } from './auth/signup/signup.component';
+import { AuthIntersetterService } from './auth/auth-intersetter.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     PostsCreateComponent,
     HeaderComponent,
-    PostListComponent
+    PostListComponent,
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -32,9 +37,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatToolbarModule,
     MatExpansionModule,
     HttpClientModule,
-    MatPaginatorModule
+    MatPaginatorModule,
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS , useClass: AuthIntersetterService, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
