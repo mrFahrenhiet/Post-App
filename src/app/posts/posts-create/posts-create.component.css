@@ -1,0 +1,23 @@
+mat-card {
+  width: 40%;
+  margin: auto;
+}
+mat-form-field.input{
+  margin: auto;
+}
+.font {
+  font-size: 40px;
+}
+
+.ml {
+  margin-left: 50px;
+}
+.mt {
+  margin-top: 50px;
+}
+.setsize{
+  width: 60%;
+  height: 60%;
+}
+
+

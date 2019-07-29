@@ -1,0 +1,23 @@
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+.active {
+  color: #ccccc8;
+  text-decoration: none;
+}
+a:hover {
+  color: dodgerblue;
+  text-decoration: none;
+  /* background:#3140a3; */
+  /* padding: 20px 10px; */
+}
+a:visited {
+  color: white;
+  text-decoration: none;
+}
+a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}

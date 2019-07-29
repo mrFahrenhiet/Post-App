@@ -1,0 +1,24 @@
+
+<mat-card class="mt" >
+
+<form [formGroup]="form" (ngSubmit) = "onSubmit()" >
+    <mat-form-field class="input" style="width: 100%">
+      <input matInput formControlName="postTitle" type="text" placeholder="title" required >
+    </mat-form-field>
+    <div>
+      <button type="button" mat-stroked-button (click) = "file.click()" class="mb-3">Pick Image</button>
+      <input type="file" #file style="display: none" (change)="onFilePicked($event)">
+    </div>
+    <div class="mt-3" *ngIf="imagePreview && imagePreview !== '' && form.get('postImage').valid">
+      <img [src]="imagePreview" class="img-fluid mb-3 setsize">
+    </div>
+    <mat-form-field style="width: 100%;">
+      <textarea matInput formControlName="postContent" placeholder="Content" required></textarea>
+    </mat-form-field>
+    <div>
+      <button type="submit" mat-fab color="warn" class="font" [disabled]="form.status!== 'VALID' && form.get('postImage').invalid">+</button>
+    </div>
+</form>
+</mat-card>
+
+

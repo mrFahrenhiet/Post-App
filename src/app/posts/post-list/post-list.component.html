@@ -1,0 +1,26 @@
+<h3 *ngIf="!isPost && !posts.isLoading"><em>Please create some posts</em></h3>
+<div class="loader" *ngIf="posts.isLoading"></div>
+<div class="container">
+  <!-- <h5><p>{{ post.postTitle }}</p></h5> - {{post.postContent}} -->
+  <mat-accordion *ngIf="!posts.isLoading" class="mt container">
+    <mat-expansion-panel *ngFor="let post of postItems;let i = index">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ post.postTitle }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div>
+        <img [src]="post.imagePath" class="img-thumbnail image mb-3">
+      </div>
+        {{ post.postContent }}
+      <mat-action-row>
+        <button class="btn btn-primary" (click)="openNew()">Open New</button>
+        <button mat-button color = "primary" (click)= "edit(post.id)">EDIT</button>
+        <button mat-button color = "warn" (click)="delete(post.id)">DELETE</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <!-- <mat-paginator [length]='lenght', [pageSize]='pageSize', [pageSizeOptions]='pageSizeOption'></mat-paginator> -->
+</div>
+
+
