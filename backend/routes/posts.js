@@ -46,13 +46,18 @@ app.get('',(req,res) =>{
   const pageSize = +req.query.pageSize;
   const currentPage = +req.query.currentPage
   const postQuery = Posts.find();
+  let fetchPosts;
   if (pageSize && currentPage) {
     postQuery.skip(pageSize * (currentPage -1)).limit(pageSize);
   }
   postQuery.then(result => {
-    res.status(200).json({
-      message: "Fetched Succsessfully",
-      posts: result
+    fetchPosts = result;
+    return Posts.count()
+    }).then(count => {
+      res.status(200).json({
+        message: "Fetched Succsessfully",
+        posts: fetchPosts,
+        maxCount: count
     });
 
   })

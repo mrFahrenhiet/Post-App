@@ -21,7 +21,8 @@
   </mat-accordion>
   <mat-paginator [length]="lenght"
               [pageSize]="pageSize"
-              [pageSizeOptions]="pageSizeOption">
+              [pageSizeOptions]="pageSizeOption"
+              (page)="onChangePage($event)">
 </mat-paginator>
 
 </div>

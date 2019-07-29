@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PostService, Posts } from '../post.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { PageEvent } from '@angular/material';
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
@@ -15,16 +16,24 @@ export class PostListComponent implements OnInit {
   lenght = 10;
   pageSize = 2;
   pageSizeOption = [2, 5, 7, 10];
+  currentPage = 1;
   ngOnInit() {
     this.posts.isLoading = true;
-    this.posts.getPosts();
-    this.posts.changedPosts.subscribe((posts: Posts[]) => {
-      this.postItems = posts;
+    this.posts.getPosts(this.pageSize, 1);
+    this.posts.changedPosts.subscribe((postsData: {posts: Posts[], count: number}) => {
+      this.postItems = postsData.posts;
+      this.lenght = postsData.count;
       // console.log(this.postItems);
       if (this.postItems.length !== 0) {
         this.isPost = true;
       }
     });
+  }
+  onChangePage(pageData: PageEvent) {
+    this.posts.isLoading = true;
+    this.currentPage = pageData.pageIndex + 1;
+    this.pageSize = pageData.pageSize;
+    this.posts.getPosts(pageData.pageSize, pageData.pageIndex + 1);
   }
   edit(id: string) {
     this.router.navigate(['/posts', id, 'edit']);
@@ -49,7 +58,10 @@ export class PostListComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.posts.isLoading = true;
-        this.posts.deletePost(id);
+        this.posts.deletePost(id).subscribe(resData => {
+          this.posts.isLoading = false;
+          this.posts.getPosts(this.pageSize, this.currentPage);
+        });
         swalWithBootstrapButtons.fire(
           'Deleted!',
           'Your post has been deleted.',

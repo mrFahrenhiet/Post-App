@@ -8,8 +8,9 @@ import { Posts } from './posts/post.service';
 export class DataStorageService {
 
   constructor(private http: HttpClient) { }
-  fetch() {
-    return this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts');
+  fetch(postPerPage: number, currentPage: number) {
+    const queryParam = `?pageSize=${postPerPage}&currentPage=${currentPage}`;
+    return this.http.get<{message: string, posts: any, maxCount: number}>('http://localhost:3000/api/posts' + queryParam);
   }
   save(post: any) {
     return this.http.post<{message: string, post: any}>('http://localhost:3000/api/posts', post);

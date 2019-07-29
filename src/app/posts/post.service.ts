@@ -13,24 +13,29 @@ export interface Posts {
 })
 export class PostService {
  constructor(private dataService: DataStorageService) { }
+ public count: number;
  public isLoading = false;
  posts: Posts[] = [];
- changedPosts = new Subject<Posts[]>();
-  getPosts() {
-    this.dataService.fetch().pipe(map((postsData) => {
-      return postsData.posts.map(post => {
+ changedPosts = new Subject<{posts: Posts[], count: number }>();
+  getPosts(postPerPage: number, currentPage: number) {
+    this.dataService.fetch(postPerPage, currentPage).pipe(map((postsData) => {
+      return {
+        posts: postsData.posts.map(post => {
         return {
           postTitle: post.postTitle,
           postContent: post.postContent,
           id: post._id,
           imagePath: post.imagePath
         };
-      });
-    }))
-    .subscribe(posts => {
+      }),
+      count: postsData.maxCount
+    };
+  }))
+    .subscribe(postsData => {
       this.isLoading = false;
-      this.posts = posts;
-      this.changedPosts.next(this.posts.slice());
+      this.count = postsData.count;
+      this.posts = postsData.posts;
+      this.changedPosts.next({posts: this.posts.slice(), count: this.count});
     });
   }
   createPosts(postContent: string, postTitle: string, image: File) {
@@ -40,15 +45,15 @@ export class PostService {
     postData.append('image', image, postTitle);
     this.dataService.save(postData).subscribe(responseData => {
       this.isLoading = false;
-      console.log(responseData.message);
-      const post: Posts = {
-        id: responseData.post.id,
-        postTitle,
-        postContent,
-        imagePath: responseData.post.imagePath
-      };
-      this.posts.push(post);
-      this.changedPosts.next(this.posts.slice());
+      // console.log(responseData.message);
+      // const post: Posts = {
+      //   id: responseData.post.id,
+      //   postTitle,
+      //   postContent,
+      //   imagePath: responseData.post.imagePath
+      // };
+      // this.posts.push(post);
+      this.changedPosts.next({posts: this.posts.slice(), count: this.count});
     });
   }
   getPostsById(id: string) {
@@ -87,29 +92,17 @@ export class PostService {
     }
     this.dataService.update(postData, id).subscribe(resData => {
       this.isLoading = false;
-      console.log(resData);
-      this.posts[idd] = {
-        id,
-        postTitle,
-        postContent,
-        imagePath: resData.posts.imagePath
-      };
-      this.changedPosts.next(this.posts.slice());
+      // console.log(resData);
+      // this.posts[idd] = {
+      //   id,
+      //   postTitle,
+      //   postContent,
+      //   imagePath: resData.posts.imagePath
+      // };
+      this.changedPosts.next({posts: this.posts.slice(), count: this.count});
     });
   }
   deletePost(id: string) {
-    this.dataService.delete(id).subscribe(resData => {
-      this.isLoading = false;
-      console.log(resData);
-      let idd;
-      // tslint:disable-next-line: prefer-for-of
-      for (let i = 0; i < this.posts.length; i++ ) {
-        if (this.posts[i].id === id) {
-           idd = i;
-        }
-      }
-      this.posts.splice(idd, 1);
-      this.changedPosts.next(this.posts.slice());
-    });
+    return this.dataService.delete(id);
   }
 }
