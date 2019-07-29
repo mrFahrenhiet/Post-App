@@ -43,7 +43,13 @@ app.post('',multer({storage:storage}).single('image'),(req,res) =>{
 
 });
 app.get('',(req,res) =>{
-  Posts.find().then(result => {
+  const pageSize = +req.query.pageSize;
+  const currentPage = +req.query.currentPage
+  const postQuery = Posts.find();
+  if (pageSize && currentPage) {
+    postQuery.skip(pageSize * (currentPage -1)).limit(pageSize);
+  }
+  postQuery.then(result => {
     res.status(200).json({
       message: "Fetched Succsessfully",
       posts: result
