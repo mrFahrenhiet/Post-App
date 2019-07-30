@@ -7,6 +7,7 @@ export interface Posts {
   postContent: string;
   id: string;
   imagePath: string;
+  creator: string;
 }
 @Injectable({
   providedIn: 'root'
@@ -25,13 +26,15 @@ export class PostService {
           postTitle: post.postTitle,
           postContent: post.postContent,
           id: post._id,
-          imagePath: post.imagePath
+          imagePath: post.imagePath,
+          creator: post.creator
         };
       }),
       count: postsData.maxCount
     };
   }))
     .subscribe(postsData => {
+      console.log(postsData);
       this.isLoading = false;
       this.count = postsData.count;
       this.posts = postsData.posts;
@@ -81,7 +84,8 @@ export class PostService {
         id,
         postTitle,
         postContent,
-        imagePath: image
+        imagePath: image,
+        creator: null
       };
     }
     let idd;

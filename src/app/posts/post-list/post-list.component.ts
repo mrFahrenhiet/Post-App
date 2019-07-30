@@ -18,17 +18,19 @@ export class PostListComponent implements OnInit {
   pageSizeOption = [2, 4, 6, 8, 10];
   currentPage = 1;
   isAuth = false;
+  userId: string;
   ngOnInit() {
     this.isAuth = this.authService.isAuthen;
     this.authService.isAuth.subscribe(authData => {
       this.isAuth = authData;
+      this.userId = this.authService.userId;
     });
     this.posts.isLoading = true;
     this.posts.getPosts(this.pageSize, 1);
     this.posts.changedPosts.subscribe((postsData: {posts: Posts[], count: number}) => {
       this.postItems = postsData.posts;
       this.lenght = postsData.count;
-      // console.log(this.postItems);
+      console.log(this.postItems);
       if (this.postItems.length !== 0) {
         this.isPost = true;
       }

@@ -25,12 +25,13 @@ const storage = multer.diskStorage({
     cb(null, name + '-' + Date.now() + '.'+ ext);
   }
 })
-app.post('',multer({storage:storage}).single('image'), authVerify,(req,res) =>{
+app.post('',authVerify,multer({storage:storage}).single('image'),(req,res) =>{
   const url = req.protocol + '://' + req.get('host');
   const posts = new Posts({
     postTitle: req.body.postTitle,
     postContent: req.body.postContent,
-    imagePath: url + '/images/' + req.file.filename
+    imagePath: url + '/images/' + req.file.filename,
+    creator: req.userData.id
   })
   posts.save().then(createdData => {
     res.status(201).json({
@@ -64,9 +65,16 @@ app.get('',(req,res) =>{
   })
 });
 app.delete('/:id', authVerify,(req,res) => {
-  Posts.deleteOne({_id: req.params.id}).then(result => {
+  Posts.deleteOne({_id: req.params.id, creator: req.userData.id}).then(result => {
     console.log(result);
-    res.json({message: "Post Deleted"});
+    if(result.n>0) {
+      res.status(200).json({
+        message: "Success! Post Deleted",
+      });
+    } else {
+      res.status(401).json({
+        message: "Not authorised"});
+    }
   })
 });
 app.put('/:id', authVerify, multer({storage:storage}).single('image'),(req, res) => {
@@ -79,14 +87,21 @@ app.put('/:id', authVerify, multer({storage:storage}).single('image'),(req, res)
     _id: req.params.id,
     postTitle: req.body.postTitle,
     postContent: req.body.postContent,
-    imagePath: imagePath
+    imagePath: imagePath,
+    creator: req.userData.id
   });
-  Posts.updateOne({_id: req.params.id},posts).then(result => {
+  Posts.updateOne({_id: req.params.id, creator: req.userData.id},posts).then(result => {
     console.log(result);
-    res.json({
+    if(result.nModified>0) {
+    res.status(200).json({
       message: "Success! Post Updated",
       posts: posts
     });
+  } else {
+    res.status(401).json({
+      message: "Not authorised",
+    });
+  }
   });
 });
 module.exports = app;

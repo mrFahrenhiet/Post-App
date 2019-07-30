@@ -46,7 +46,8 @@ app.post('/login', (req,res) => {
     const token = jwt.sign({username: fetchedUser.username, id: fetchedUser._id}, 'this-is-my-secret-i-know-it-should-be-longer', {expiresIn: '1h'})
     res.status(200).json({
       token: token,
-      expiresIn: 3600
+      expiresIn: 3600,
+      id: fetchedUser._id
     })
   }).catch(err => {
     return res.status(401).json({
