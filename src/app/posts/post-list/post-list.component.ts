@@ -3,21 +3,26 @@ import { PostService, Posts } from '../post.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { PageEvent } from '@angular/material';
+import { AuthService } from 'src/app/auth/auth.service';
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.css']
 })
 export class PostListComponent implements OnInit {
-
-  constructor(public posts: PostService, private router: Router) { }
+  constructor(public posts: PostService, private router: Router, private authService: AuthService) { }
   postItems: Posts[] = [];
   isPost = false;
   lenght = 10;
   pageSize = 2;
-  pageSizeOption = [2, 5, 7, 10];
+  pageSizeOption = [2, 4, 6, 8, 10];
   currentPage = 1;
+  isAuth = false;
   ngOnInit() {
+    this.isAuth = this.authService.isAuthen;
+    this.authService.isAuth.subscribe(authData => {
+      this.isAuth = authData;
+    });
     this.posts.isLoading = true;
     this.posts.getPosts(this.pageSize, 1);
     this.posts.changedPosts.subscribe((postsData: {posts: Posts[], count: number}) => {

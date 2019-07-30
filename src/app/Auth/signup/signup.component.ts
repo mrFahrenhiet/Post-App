@@ -26,6 +26,7 @@ export class SignupComponent implements OnInit {
       password: this.form.value.password,
       id: null
     };
+    this.authService.isLoad = true;
     this.authService.addUser(newUser);
   }
 

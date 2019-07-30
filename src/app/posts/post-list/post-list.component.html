@@ -13,7 +13,7 @@
         <img [src]="post.imagePath" class="img-thumbnail image mb-3">
       </div>
         {{ post.postContent }}
-      <mat-action-row>
+      <mat-action-row *ngIf="isAuth">
         <button mat-button color = "primary" (click)= "edit(post.id)">EDIT</button>
         <button mat-button color = "warn" (click)="delete(post.id)">DELETE</button>
       </mat-action-row>
@@ -22,7 +22,8 @@
   <mat-paginator [length]="lenght"
               [pageSize]="pageSize"
               [pageSizeOptions]="pageSizeOption"
-              (page)="onChangePage($event)">
+              (page)="onChangePage($event)"
+              >
 </mat-paginator>
 
 </div>

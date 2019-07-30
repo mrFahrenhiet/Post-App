@@ -8,5 +8,5 @@
     true}" mat-button *ngIf="!isAuthenticated">Login</a></span>
   <span><a [routerLink]="['signup']" routerLinkActive = "active" [routerLinkActiveOptions]="{exact:
     true}" mat-button *ngIf="!isAuthenticated">Signup</a></span>
-    <span><button mat-button *ngIf="isAuthenticated" class="button">Logout</button></span>
+    <span><button mat-button *ngIf="isAuthenticated" class="button" (click)="logout()">Logout</button></span>
 </mat-toolbar>
