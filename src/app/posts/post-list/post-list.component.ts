@@ -21,6 +21,7 @@ export class PostListComponent implements OnInit {
   userId: string;
   ngOnInit() {
     this.isAuth = this.authService.isAuthen;
+    this.userId = this.authService.userId;
     this.authService.isAuth.subscribe(authData => {
       this.isAuth = authData;
       this.userId = this.authService.userId;
@@ -35,6 +36,8 @@ export class PostListComponent implements OnInit {
         this.isPost = true;
       }
     });
+    console.log('New' + this.userId);
+
   }
   onChangePage(pageData: PageEvent) {
     this.posts.isLoading = true;

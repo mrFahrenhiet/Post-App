@@ -71,6 +71,7 @@ export class AuthService {
      this.token = authData.token;
      this.isAuthen = true;
      this.userId = authData.id;
+     console.log(this.userId);
      this.autoLogout(expiresIn/1000)
      this.isAuth.next(true);
     }
